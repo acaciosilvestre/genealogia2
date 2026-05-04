@@ -1,0 +1,30 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="My" GeneratedClassName="MySettings" UseMySettingsClassName="true">
+  <Profiles />
+  <Settings>
+    <Setting Name="radiobuttonxmlv" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="defaultInputFile" Type="System.String" Scope="User">
+      <Value Profile="(Default)">C:\Users\acaci\OneDrive\Documents\NovaBase_ansi.ged</Value>
+    </Setting>
+    <Setting Name="connectionString" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Driver={Microsoft Access Driver (*.mdb, *.accdb)};Dbq=</Value>
+    </Setting>
+    <Setting Name="xml_config_file" Type="System.String" Scope="User">
+      <Value Profile="(Default)">genea4.xml</Value>
+    </Setting>
+    <Setting Name="DBName" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="xmlFolder" Type="System.String" Scope="User">
+      <Value Profile="(Default)">C:\genealogia - Copia (7)\bin\Release\net8.0-windows</Value>
+    </Setting>
+    <Setting Name="gedComFolder" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="radiobuttonutf8" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+  </Settings>
+</SettingsFile>
