@@ -57,6 +57,10 @@ Partial Class Form1
         CarregarToolStripMenuItem = New ToolStripMenuItem()
         FontesToolStripMenuItem = New ToolStripMenuItem()
         IncluirToolStripMenuItem = New ToolStripMenuItem()
+        PastaToolStripMenuItem = New ToolStripMenuItem()
+        IndividualToolStripMenuItem = New ToolStripMenuItem()
+        ArquivoToolStripMenuItem1 = New ToolStripMenuItem()
+        LinkToolStripMenuItem = New ToolStripMenuItem()
         ExibirToolStripMenuItem1 = New ToolStripMenuItem()
         PesquisarToolStripMenuItem1 = New ToolStripMenuItem()
         CToolStripMenuItem = New ToolStripMenuItem()
@@ -316,20 +320,46 @@ Partial Class Form1
         ' 
         ' IncluirToolStripMenuItem
         ' 
+        IncluirToolStripMenuItem.DropDownItems.AddRange(New ToolStripItem() {PastaToolStripMenuItem, IndividualToolStripMenuItem})
         IncluirToolStripMenuItem.Name = "IncluirToolStripMenuItem"
-        IncluirToolStripMenuItem.Size = New Size(155, 26)
+        IncluirToolStripMenuItem.Size = New Size(224, 26)
         IncluirToolStripMenuItem.Text = "incluir"
+        ' 
+        ' PastaToolStripMenuItem
+        ' 
+        PastaToolStripMenuItem.Name = "PastaToolStripMenuItem"
+        PastaToolStripMenuItem.Size = New Size(224, 26)
+        PastaToolStripMenuItem.Text = "Pasta"
+        ' 
+        ' IndividualToolStripMenuItem
+        ' 
+        IndividualToolStripMenuItem.DropDownItems.AddRange(New ToolStripItem() {ArquivoToolStripMenuItem1, LinkToolStripMenuItem})
+        IndividualToolStripMenuItem.Name = "IndividualToolStripMenuItem"
+        IndividualToolStripMenuItem.Size = New Size(224, 26)
+        IndividualToolStripMenuItem.Text = "individual"
+        ' 
+        ' ArquivoToolStripMenuItem1
+        ' 
+        ArquivoToolStripMenuItem1.Name = "ArquivoToolStripMenuItem1"
+        ArquivoToolStripMenuItem1.Size = New Size(224, 26)
+        ArquivoToolStripMenuItem1.Text = "arquivo"
+        ' 
+        ' LinkToolStripMenuItem
+        ' 
+        LinkToolStripMenuItem.Name = "LinkToolStripMenuItem"
+        LinkToolStripMenuItem.Size = New Size(224, 26)
+        LinkToolStripMenuItem.Text = "link"
         ' 
         ' ExibirToolStripMenuItem1
         ' 
         ExibirToolStripMenuItem1.Name = "ExibirToolStripMenuItem1"
-        ExibirToolStripMenuItem1.Size = New Size(155, 26)
+        ExibirToolStripMenuItem1.Size = New Size(224, 26)
         ExibirToolStripMenuItem1.Text = "exibir"
         ' 
         ' PesquisarToolStripMenuItem1
         ' 
         PesquisarToolStripMenuItem1.Name = "PesquisarToolStripMenuItem1"
-        PesquisarToolStripMenuItem1.Size = New Size(155, 26)
+        PesquisarToolStripMenuItem1.Size = New Size(224, 26)
         PesquisarToolStripMenuItem1.Text = "pesquisar"
         ' 
         ' CToolStripMenuItem
@@ -654,5 +684,9 @@ Partial Class Form1
     Friend WithEvents GoogleToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents AtualizarToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents ProjResgateToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents PastaToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents IndividualToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents ArquivoToolStripMenuItem1 As ToolStripMenuItem
+    Friend WithEvents LinkToolStripMenuItem As ToolStripMenuItem
 
 End Class

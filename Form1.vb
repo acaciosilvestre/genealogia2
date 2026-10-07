@@ -1,14 +1,15 @@
 ﻿Imports System.Configuration
-Imports System.Xml
-Imports Microsoft.VisualBasic.ApplicationServices
 Imports System.Data
-Imports System.Windows.Forms.VisualStyles
-Imports System.Runtime.Intrinsics
-Imports System.Reflection.Metadata
 Imports System.Diagnostics.Eventing.Reader
-Imports System.Windows.Forms.LinkLabel
-Imports System.Xml.Serialization
 Imports System.Reflection
+Imports System.Reflection.Metadata
+Imports System.Runtime.Intrinsics
+Imports System.Security.Cryptography
+Imports System.Windows.Forms.LinkLabel
+Imports System.Windows.Forms.VisualStyles
+Imports System.Xml
+Imports System.Xml.Serialization
+Imports Microsoft.VisualBasic.ApplicationServices
 
 Public Class Form1
     Dim connectionString As String
@@ -518,26 +519,8 @@ Public Class Form1
         Next
     End Sub
 
-    Private Sub IncluirToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles IncluirToolStripMenuItem.Click
-        If FolderBrowserDialog1.ShowDialog() Then
-            Dim i = 0
-            Try
-                conn.Execute("CREATE TABLE Fontes")
-                conn.Execute("ALTER TABLE Fontes ADD COLUMN ID Number;")
-                conn.Execute("ALTER TABLE Fontes ADD COLUMN Local Text")
-                conn.Execute("ALTER TABLE Fontes ADD COLUMN IID Text")
-
-                For Each foundFile As String In My.Computer.FileSystem.GetFiles(FolderBrowserDialog1.SelectedPath)
-                    'RichTextBox2.Text = RichTextBox2.Text & foundFile & vbCrLf
-                    i = i + 1
-                    conn.Execute("INSERT INTO Fontes(ID,Local,IID) VALUES ('" & i & "','" & foundFile & "','')")
-                Next
-            Catch ex As Exception
-                MsgBox(ex.Message)
-
-            End Try
-        End If
-    End Sub
+    '    Private Sub IncluirToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles IncluirToolStripMenuItem.Click
+    '   End Sub
 
     Private Sub ExibirToolStripMenuItem1_Click(sender As Object, e As EventArgs) Handles ExibirToolStripMenuItem1.Click
         If Not connected Then
@@ -689,6 +672,78 @@ Public Class Form1
             done = False
         End If
         person = Nothing
+    End Sub
+
+    Private Sub PastaToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles PastaToolStripMenuItem.Click
+        If FolderBrowserDialog1.ShowDialog() Then
+            Dim i = 0
+            Try
+                conn.Execute("CREATE TABLE Fontes")
+                conn.Execute("ALTER TABLE Fontes ADD COLUMN ID Number;")
+                conn.Execute("ALTER TABLE Fontes ADD COLUMN Local Text")
+                conn.Execute("ALTER TABLE Fontes ADD COLUMN IID Text")
+
+                For Each foundFile As String In My.Computer.FileSystem.GetFiles(FolderBrowserDialog1.SelectedPath)
+                    'RichTextBox2.Text = RichTextBox2.Text & foundFile & vbCrLf
+                    i = i + 1
+                    conn.Execute("INSERT INTO Fontes(ID,Local,IID) VALUES ('" & i & "','" & foundFile & "','')")
+                Next
+            Catch ex As Exception
+                MsgBox(ex.Message)
+
+            End Try
+        End If
+
+    End Sub
+
+    Private Sub ArquivoToolStripMenuItem1_Click(sender As Object, e As EventArgs) Handles ArquivoToolStripMenuItem1.Click
+
+        Dim ofd As New OpenFileDialog()
+
+        ' Configurações opcionais
+        'ofd.Filter = "Arquivos de texto|*.txt|Todos os arquivos|*.*"
+        ofd.Title = "Selecione um arquivo"
+
+        ' Mostra a janela
+        If ofd.ShowDialog() = DialogResult.OK Then
+            ' Se o usuário clicou em "Abrir"
+            If Not String.IsNullOrEmpty(ofd.FileName) Then
+                ' Define a consulta SQL ordenando pelo ID de forma decrescente
+                rs = conn.execute("SELECT * FROM Fontes;")
+
+                Static Dim i
+
+                With DataGridView2
+                    .Rows.Clear()
+                    .Columns.Clear()
+
+                    For Each r In rs.fields
+                        .Columns.Add(r.name, r.name)
+                    Next
+
+                    i = 0
+
+                    While Not rs.eof()
+                        .Rows.Add()
+                        For Each r In rs.fields
+                            .Rows(i).Cells(r.name).Value = r.value
+                        Next
+                        i = i + 1
+                        rs.movenext()
+                    End While
+
+                    .Refresh()
+                End With
+                i = i + 1
+                conn.Execute("INSERT INTO Fontes(ID,Local,IID) VALUES ('" & i & "','" & ofd.FileName & "','')")
+                DataGridView2.Refresh()
+            End If
+        Else
+            ' Se o usuário cancelou
+            MessageBox.Show("Nenhum arquivo foi selecionado.")
+        End If
+
+
     End Sub
 
 

@@ -6,7 +6,7 @@
       <Value Profile="(Default)">True</Value>
     </Setting>
     <Setting Name="defaultInputFile" Type="System.String" Scope="User">
-      <Value Profile="(Default)">C:\Users\acaci\OneDrive\Documents\NovaBase_ansi.ged</Value>
+      <Value Profile="(Default)">NovaBase_utf8.ged</Value>
     </Setting>
     <Setting Name="connectionString" Type="System.String" Scope="User">
       <Value Profile="(Default)">Driver={Microsoft Access Driver (*.mdb, *.accdb)};Dbq=</Value>
@@ -15,13 +15,13 @@
       <Value Profile="(Default)">genea4.xml</Value>
     </Setting>
     <Setting Name="DBName" Type="System.String" Scope="User">
-      <Value Profile="(Default)" />
+      <Value Profile="(Default)">db10.accdb</Value>
     </Setting>
     <Setting Name="xmlFolder" Type="System.String" Scope="User">
       <Value Profile="(Default)">C:\genealogia - Copia (7)\bin\Release\net8.0-windows</Value>
     </Setting>
     <Setting Name="gedComFolder" Type="System.String" Scope="User">
-      <Value Profile="(Default)" />
+      <Value Profile="(Default)">gedcom</Value>
     </Setting>
     <Setting Name="radiobuttonutf8" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>
