@@ -197,19 +197,19 @@ Partial Class Form1
         ' ConfigurarToolStripMenuItem
         ' 
         ConfigurarToolStripMenuItem.Name = "ConfigurarToolStripMenuItem"
-        ConfigurarToolStripMenuItem.Size = New Size(162, 26)
+        ConfigurarToolStripMenuItem.Size = New Size(224, 26)
         ConfigurarToolStripMenuItem.Text = "Configurar"
         ' 
         ' ConectarToolStripMenuItem
         ' 
         ConectarToolStripMenuItem.Name = "ConectarToolStripMenuItem"
-        ConectarToolStripMenuItem.Size = New Size(162, 26)
+        ConectarToolStripMenuItem.Size = New Size(224, 26)
         ConectarToolStripMenuItem.Text = "Conectar"
         ' 
         ' FecharToolStripMenuItem
         ' 
         FecharToolStripMenuItem.Name = "FecharToolStripMenuItem"
-        FecharToolStripMenuItem.Size = New Size(162, 26)
+        FecharToolStripMenuItem.Size = New Size(224, 26)
         FecharToolStripMenuItem.Text = "Fechar"
         ' 
         ' PesquisarToolStripMenuItem
@@ -322,44 +322,44 @@ Partial Class Form1
         ' 
         IncluirToolStripMenuItem.DropDownItems.AddRange(New ToolStripItem() {PastaToolStripMenuItem, IndividualToolStripMenuItem})
         IncluirToolStripMenuItem.Name = "IncluirToolStripMenuItem"
-        IncluirToolStripMenuItem.Size = New Size(224, 26)
+        IncluirToolStripMenuItem.Size = New Size(155, 26)
         IncluirToolStripMenuItem.Text = "incluir"
         ' 
         ' PastaToolStripMenuItem
         ' 
         PastaToolStripMenuItem.Name = "PastaToolStripMenuItem"
-        PastaToolStripMenuItem.Size = New Size(224, 26)
+        PastaToolStripMenuItem.Size = New Size(157, 26)
         PastaToolStripMenuItem.Text = "Pasta"
         ' 
         ' IndividualToolStripMenuItem
         ' 
         IndividualToolStripMenuItem.DropDownItems.AddRange(New ToolStripItem() {ArquivoToolStripMenuItem1, LinkToolStripMenuItem})
         IndividualToolStripMenuItem.Name = "IndividualToolStripMenuItem"
-        IndividualToolStripMenuItem.Size = New Size(224, 26)
+        IndividualToolStripMenuItem.Size = New Size(157, 26)
         IndividualToolStripMenuItem.Text = "individual"
         ' 
         ' ArquivoToolStripMenuItem1
         ' 
         ArquivoToolStripMenuItem1.Name = "ArquivoToolStripMenuItem1"
-        ArquivoToolStripMenuItem1.Size = New Size(224, 26)
+        ArquivoToolStripMenuItem1.Size = New Size(142, 26)
         ArquivoToolStripMenuItem1.Text = "arquivo"
         ' 
         ' LinkToolStripMenuItem
         ' 
         LinkToolStripMenuItem.Name = "LinkToolStripMenuItem"
-        LinkToolStripMenuItem.Size = New Size(224, 26)
+        LinkToolStripMenuItem.Size = New Size(142, 26)
         LinkToolStripMenuItem.Text = "link"
         ' 
         ' ExibirToolStripMenuItem1
         ' 
         ExibirToolStripMenuItem1.Name = "ExibirToolStripMenuItem1"
-        ExibirToolStripMenuItem1.Size = New Size(224, 26)
+        ExibirToolStripMenuItem1.Size = New Size(155, 26)
         ExibirToolStripMenuItem1.Text = "exibir"
         ' 
         ' PesquisarToolStripMenuItem1
         ' 
         PesquisarToolStripMenuItem1.Name = "PesquisarToolStripMenuItem1"
-        PesquisarToolStripMenuItem1.Size = New Size(224, 26)
+        PesquisarToolStripMenuItem1.Size = New Size(155, 26)
         PesquisarToolStripMenuItem1.Text = "pesquisar"
         ' 
         ' CToolStripMenuItem
@@ -427,7 +427,8 @@ Partial Class Form1
         ' 
         ' PictureBox1
         ' 
-        PictureBox1.Image = CType(resources.GetObject("PictureBox1.Image"), Image)
+        PictureBox1.Image = My.Resources.Resources.off64
+        PictureBox1.InitialImage = CType(resources.GetObject("PictureBox1.InitialImage"), Image)
         PictureBox1.Location = New Point(1330, 33)
         PictureBox1.Name = "PictureBox1"
         PictureBox1.Size = New Size(35, 33)

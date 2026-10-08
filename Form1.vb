@@ -146,18 +146,33 @@ Public Class Form1
     End Sub
 
     Private Sub AbrirToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles AbrirToolStripMenuItem.Click
-        OpenFileDialog2.FileName = "*.ged"
-        If My.Settings.gedComFolder <> "" Then
-            OpenFileDialog2.InitialDirectory = My.Settings.gedComFolder
-        Else
-            If OpenFileDialog2.ShowDialog() = 1 Then
-                My.Settings.defaultInputFile = OpenFileDialog2.FileName
-                My.Settings.gedComFolder = OpenFileDialog2.InitialDirectory
-                My.Settings.Save()
-                StartFS(OpenFileDialog2.FileName)
+        'OpenFileDialog2.FileName = "*.ged"
+        'If My.Settings.gedComFolder <> "" Then
+        'OpenFileDialog2.InitialDirectory = My.Settings.gedComFolder
+        'Else
+        'If OpenFileDialog2.ShowDialog() = 1 Then
+        'My.Settings.defaultInputFile = OpenFileDialog2.FileName
+        'My.Settings.gedComFolder = OpenFileDialog2.InitialDirectory
+        'My.Settings.Save()
+        'StartFS(OpenFileDialog2.FileName)
+        'End If
+        'End If
+
+        Dim ofd As New OpenFileDialog()
+
+        ' Configurações opcionais
+        ofd.InitialDirectory = My.Settings.gedComFolder
+        ofd.Filter = "Arquivos GEDCOM|*.ged"
+        ofd.Title = "Selecione um arquivo"
+
+        ' Mostra a janela
+        If ofd.ShowDialog() = DialogResult.OK Then
+            ' Se o usuário clicou em "Abrir"
+            If Not String.IsNullOrEmpty(ofd.FileName) Then
+                My.Settings.defaultInputFile = ofd.FileName
+                StartFS(ofd.FileName)
             End If
         End If
-
 
         ShowStatus()
     End Sub
@@ -194,8 +209,9 @@ Public Class Form1
     Private Sub FecharToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles FecharToolStripMenuItem.Click
         conn.close()
         If conn.state = 0 Then
-            Dim myimg = New Bitmap("C:\genealogia - Copia (7)\My Project\off64.png")
-            PictureBox1.Image = myimg
+            'Dim myimg = New Bitmap("C:\genealogia - Copia (7)\My Project\off64.png")
+            'PictureBox1.Image = myimg
+            PictureBox1.Image = My.Resources.off64
             ShowStatus()
         End If
         rs = Nothing
@@ -258,11 +274,13 @@ Public Class Form1
         rs = CreateObject("adodb.recordset")
         conn.Open(connectionString)
         If conn.state = 1 Then
-            Dim myimg = New Bitmap("C:\genealogia - Copia (7)\My Project\on64.png")
-            PictureBox1.Image = myimg
+            'Dim myimg = New Bitmap("C:\genealogia - Copia (7)\My Project\on64.png")
+            'PictureBox1.Image = myimg
+            PictureBox1.Image = My.Resources.on64
             connected = True
             ShowStatus()
         End If
+
     End Sub
 
     Private Sub PictureBox1_Click(sender As Object, e As EventArgs) Handles PictureBox1.Click
@@ -532,10 +550,14 @@ Public Class Form1
     End Sub
 
     Private Sub PesquisarToolStripMenuItem1_Click(sender As Object, e As EventArgs) Handles PesquisarToolStripMenuItem1.Click
-        Dim parametro = InputBox("Digite o valor a ser pesquisado: ", sender.ToString)
+        If Not connected Then
+            MsgBox("Conecte-se para iniciar sessão!")
+        Else
+            Dim parametro = InputBox("Digite o valor a ser pesquisado: ", sender.ToString)
         If (parametro <> "") Then
             Dim qry = "SELECT ID,Local,IID FROM Fontes GROUP BY ID, Local,IID HAVING Local Like ('%" & parametro & "%');"
             PopulateDGV(DataGridView2, qry)
+        End If
         End If
     End Sub
 
@@ -675,7 +697,11 @@ Public Class Form1
     End Sub
 
     Private Sub PastaToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles PastaToolStripMenuItem.Click
-        If FolderBrowserDialog1.ShowDialog() Then
+        If Not connected Then
+            MsgBox("Conecte-se para iniciar sessão!")
+        Else
+
+            If FolderBrowserDialog1.ShowDialog() Then
             Dim i = 0
             Try
                 conn.Execute("CREATE TABLE Fontes")
@@ -693,57 +719,60 @@ Public Class Form1
 
             End Try
         End If
-
+        End If
     End Sub
 
     Private Sub ArquivoToolStripMenuItem1_Click(sender As Object, e As EventArgs) Handles ArquivoToolStripMenuItem1.Click
-
-        Dim ofd As New OpenFileDialog()
-
-        ' Configurações opcionais
-        'ofd.Filter = "Arquivos de texto|*.txt|Todos os arquivos|*.*"
-        ofd.Title = "Selecione um arquivo"
-
-        ' Mostra a janela
-        If ofd.ShowDialog() = DialogResult.OK Then
-            ' Se o usuário clicou em "Abrir"
-            If Not String.IsNullOrEmpty(ofd.FileName) Then
-                ' Define a consulta SQL ordenando pelo ID de forma decrescente
-                rs = conn.execute("SELECT * FROM Fontes;")
-
-                Static Dim i
-
-                With DataGridView2
-                    .Rows.Clear()
-                    .Columns.Clear()
-
-                    For Each r In rs.fields
-                        .Columns.Add(r.name, r.name)
-                    Next
-
-                    i = 0
-
-                    While Not rs.eof()
-                        .Rows.Add()
-                        For Each r In rs.fields
-                            .Rows(i).Cells(r.name).Value = r.value
-                        Next
-                        i = i + 1
-                        rs.movenext()
-                    End While
-
-                    .Refresh()
-                End With
-                i = i + 1
-                conn.Execute("INSERT INTO Fontes(ID,Local,IID) VALUES ('" & i & "','" & ofd.FileName & "','')")
-                DataGridView2.Refresh()
-            End If
+        If Not connected Then
+            MsgBox("Conecte-se para iniciar sessão!")
         Else
-            ' Se o usuário cancelou
-            MessageBox.Show("Nenhum arquivo foi selecionado.")
+
+            Dim ofd As New OpenFileDialog()
+
+            ' Configurações opcionais
+            'ofd.Filter = "Arquivos de texto|*.txt|Todos os arquivos|*.*"
+            ofd.Title = "Selecione um arquivo"
+
+            ' Mostra a janela
+            If ofd.ShowDialog() = DialogResult.OK Then
+                ' Se o usuário clicou em "Abrir"
+                If Not String.IsNullOrEmpty(ofd.FileName) Then
+                    ' Define a consulta SQL ordenando pelo ID de forma decrescente
+                    rs = conn.execute("SELECT * FROM Fontes;")
+
+                    Static Dim i
+
+                    With DataGridView2
+                        .Rows.Clear()
+                        .Columns.Clear()
+
+                        For Each r In rs.fields
+                            .Columns.Add(r.name, r.name)
+                        Next
+
+                        i = 0
+
+                        While Not rs.eof()
+                            .Rows.Add()
+                            For Each r In rs.fields
+                                .Rows(i).Cells(r.name).Value = r.value
+                            Next
+                            i = i + 1
+                            rs.movenext()
+                        End While
+
+                        .Refresh()
+                    End With
+                    i = i + 1
+                    conn.Execute("INSERT INTO Fontes(ID,Local,IID) VALUES ('" & i & "','" & ofd.FileName & "','')")
+                    DataGridView2.Refresh()
+                End If
+            Else
+                ' Se o usuário cancelou
+                MessageBox.Show("Nenhum arquivo foi selecionado.")
+            End If
+
         End If
-
-
     End Sub
 
 

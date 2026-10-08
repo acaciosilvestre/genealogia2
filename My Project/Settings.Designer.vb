@@ -149,6 +149,18 @@ Namespace My
                 Me("radiobuttonutf8") = value
             End Set
         End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("fontes")>  _
+        Public Property fontesFolder() As String
+            Get
+                Return CType(Me("fontesFolder"),String)
+            End Get
+            Set
+                Me("fontesFolder") = value
+            End Set
+        End Property
     End Class
 End Namespace
 
