@@ -1,6 +1,7 @@
 ﻿Imports System.Configuration
 Imports System.Data
 Imports System.Diagnostics.Eventing.Reader
+Imports System.IO
 Imports System.Reflection
 Imports System.Reflection.Metadata
 Imports System.Runtime.Intrinsics
@@ -709,12 +710,14 @@ Public Class Form1
                 conn.Execute("ALTER TABLE Fontes ADD COLUMN Local Text")
                 conn.Execute("ALTER TABLE Fontes ADD COLUMN IID Text")
 
-                For Each foundFile As String In My.Computer.FileSystem.GetFiles(FolderBrowserDialog1.SelectedPath)
-                    'RichTextBox2.Text = RichTextBox2.Text & foundFile & vbCrLf
-                    i = i + 1
-                    conn.Execute("INSERT INTO Fontes(ID,Local,IID) VALUES ('" & i & "','" & foundFile & "','')")
-                Next
-            Catch ex As Exception
+                    For Each foundFile As String In My.Computer.FileSystem.GetFiles(FolderBrowserDialog1.SelectedPath)
+
+                        Dim nomeArquivo As String = "fontes\" & Path.GetFileName(foundFile)
+
+                        i = i + 1
+                        conn.Execute("INSERT INTO Fontes(ID,Local,IID) VALUES ('" & i & "','" & nomeArquivo & "','')")
+                    Next
+                Catch ex As Exception
                 MsgBox(ex.Message)
 
             End Try
