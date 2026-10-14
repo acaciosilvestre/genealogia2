@@ -64,9 +64,22 @@ Module IO
         fs = Nothing
     End Sub
     Sub Insere()
-        'On Error Resume Next
-        conn.Execute("INSERT INTO Membros(ID,Nome,Nascimento,LocalNascimento,Falecimento,LocalFalecimento,Batismo,LocalBatismo,Sepultamento,LocalSepultamento) VALUES ('" &
-pessoa & "','" & nome & "','" & nasc & "','" & bloc & "','" & mort & "','" & dloc & "','" & batismo & "','" & bloc & "','" & sepulta & "','" & sloc & "')")
+        Try
+            'Escape values to reduce risco de SQL injection simples
+            Dim enome = Utils.EscapeSql(nome)
+            Dim enasc = Utils.EscapeSql(nasc)
+            Dim ebloc = Utils.EscapeSql(bloc)
+            Dim emort = Utils.EscapeSql(mort)
+            Dim edloc = Utils.EscapeSql(dloc)
+            Dim ebatismo = Utils.EscapeSql(batismo)
+            Dim esepulta = Utils.EscapeSql(sepulta)
+            Dim esloc = Utils.EscapeSql(sloc)
+
+            conn.Execute("INSERT INTO Membros(ID,Nome,Nascimento,LocalNascimento,Falecimento,LocalFalecimento,Batismo,LocalBatismo,Sepultamento,LocalSepultamento) VALUES ('" & _
+            pessoa & "','" & enome & "','" & enasc & "','" & ebloc & "','" & emort & "','" & edloc & "','" & ebatismo & "','" & ebloc & "','" & esepulta & "','" & esloc & "')")
+        Catch ex As Exception
+            Debug.WriteLine("Insere error: " & ex.Message)
+        End Try
     End Sub
 
 

@@ -3,26 +3,43 @@ Module DataBase
 	Sub createDataBase(DataBasePath)
 		Dim cat, field, db
 
-		cat = CreateObject("ADOX.Catalog")
-
-		cat.Create("Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" & DataBasePath & ";")
-		db = CreateObject("DAO.DBEngine.120")
-		db.Begintrans
-		conn = db.OpenDatabase(DataBasePath)
-		' Aqui você pode adicionar tabelas, consultas, etc. ao banco de dados.
-		conn.Execute("CREATE TABLE " & TableName)
-		For Each field In Campos
-			conn.Execute("ALTER TABLE " & TableName & " ADD COLUMN " & field & ";")
-		Next
-
-		startFS2(InputFileName)
-		PopulateDB()
-		stopFS2()
-		db.Committrans
-		conn.close
-		conn = Nothing
-		db = Nothing
 		cat = Nothing
+		db = Nothing
+
+		Try
+			cat = CreateObject("ADOX.Catalog")
+			cat.Create("Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" & DataBasePath & ";")
+			db = CreateObject("DAO.DBEngine.120")
+			db.Begintrans
+			conn = db.OpenDatabase(DataBasePath)
+			' Aqui você pode adicionar tabelas, consultas, etc. ao banco de dados.
+			conn.Execute("CREATE TABLE " & TableName)
+			For Each field In Campos
+				conn.Execute("ALTER TABLE " & TableName & " ADD COLUMN " & field & ";")
+			Next
+
+			startFS2(InputFileName)
+			PopulateDB()
+			stopFS2()
+			db.Committrans
+		Catch ex As Exception
+			' Registre ou trate o erro conforme apropriado
+			Debug.WriteLine("createDataBase error: " & ex.Message)
+			Try
+				db.Rollback
+			Catch
+			End Try
+		Finally
+			If Not conn Is Nothing Then
+				Try
+					conn.close
+				Catch
+				End Try
+			End If
+			conn = Nothing
+			db = Nothing
+			cat = Nothing
+		End Try
 
 	End Sub
 
