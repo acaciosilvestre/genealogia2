@@ -79,6 +79,8 @@ Public Class Form1
             End Select
 
             PopulateDGV(DataGridView1, qry)
+            DirectCast(MenuStrip1.Items(3), ToolStripMenuItem).DropDownItems(3).Enabled = True
+            DirectCast(MenuStrip1.Items(3), ToolStripMenuItem).DropDownItems(4).Enabled = True
         End If
     End Sub
 
@@ -107,7 +109,7 @@ Public Class Form1
                     i = i + 1
                     rs.movenext()
                 End While
-
+                .Columns(1).Width = 400
                 .Refresh()
             End With
             populatingDGV = False
@@ -147,22 +149,11 @@ Public Class Form1
     End Sub
 
     Private Sub AbrirToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles AbrirToolStripMenuItem.Click
-        'OpenFileDialog2.FileName = "*.ged"
-        'If My.Settings.gedComFolder <> "" Then
-        'OpenFileDialog2.InitialDirectory = My.Settings.gedComFolder
-        'Else
-        'If OpenFileDialog2.ShowDialog() = 1 Then
-        'My.Settings.defaultInputFile = OpenFileDialog2.FileName
-        'My.Settings.gedComFolder = OpenFileDialog2.InitialDirectory
-        'My.Settings.Save()
-        'StartFS(OpenFileDialog2.FileName)
-        'End If
-        'End If
-
+        'MsgBox(My.Settings.defaultInputFile)
         Dim ofd As New OpenFileDialog()
 
         ' Configurações opcionais
-        ofd.InitialDirectory = My.Settings.gedComFolder
+        ofd.InitialDirectory = My.Settings.gedcomFolder
         ofd.Filter = "Arquivos GEDCOM|*.ged"
         ofd.Title = "Selecione um arquivo"
 
@@ -174,7 +165,7 @@ Public Class Form1
                 StartFS(ofd.FileName)
             End If
         End If
-
+        My.Settings.defaultInputFile = ofd.FileName
         ShowStatus()
     End Sub
 
@@ -222,17 +213,36 @@ Public Class Form1
 
     Private Sub CarregarToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles CarregarToolStripMenuItem.Click
 
-        OpenFileDialog1.FileName = "*.xml"
-        If My.Settings.xmlFolder <> "" Then
-            OpenFileDialog1.InitialDirectory = My.Settings.xmlFolder
-        End If
-        If OpenFileDialog1.ShowDialog() Then
-            My.Settings.xmlFolder = OpenFileDialog1.InitialDirectory
-            My.Settings.Save()
-            loadingxml = True
-            LoadXML(OpenFileDialog1.FileName)
-        Else
-            loadingxml = False
+        txtQuery.Text = My.Settings.xmlFolder
+        Dim ofd As New OpenFileDialog()
+
+        ' Configurações opcionais
+        ofd.InitialDirectory = My.Settings.xmlFolder
+        ofd.Filter = "Arquivos XML|*.xml"
+        ofd.Title = "Selecione um arquivo"
+
+        ' Mostra a janela
+        If ofd.ShowDialog() = DialogResult.OK Then
+            ' Se o usuário clicou em "Abrir"
+            If Not String.IsNullOrEmpty(ofd.FileName) Then
+                loadingxml = True
+                LoadXML(ofd.FileName)
+            Else
+                loadingxml = False
+
+            End If
+
+            '        OpenFileDialog1.FileName = "*.xml"
+            '               If My.Settings.xmlFolder <> "" Then
+            '              OpenFileDialog1.InitialDirectory = My.Settings.xmlFolder
+            '         End If
+            '            If OpenFileDialog1.ShowDialog() = 1 Then
+            'My.Settings.xmlFolder = OpenFileDialog1.InitialDirectory
+            'My.Settings.Save()
+            '           loadingxml = True
+            '          LoadXML(OpenFileDialog1.FileName)
+            '         Else
+            '        loadingxml = False
         End If
     End Sub
 
@@ -358,6 +368,8 @@ Public Class Form1
         Dim qry As String
         qry = "SELECT * FROM Membros WHERE Nome = '" & e.Node.Text & "' ;"
         PopulateDGV(DataGridView1, qry)
+        TabControl1.SelectedTab = TabPage1
+
     End Sub
     Sub PopularTvw(id As Integer)
 
@@ -547,6 +559,8 @@ Public Class Form1
         Else
             Dim qry = "SELECT * FROM Fontes"
             PopulateDGV(DataGridView2, qry)
+            TabControl1.SelectedTab = TabPage2
+
         End If
     End Sub
 
@@ -555,10 +569,12 @@ Public Class Form1
             MsgBox("Conecte-se para iniciar sessão!")
         Else
             Dim parametro = InputBox("Digite o valor a ser pesquisado: ", sender.ToString)
-        If (parametro <> "") Then
-            Dim qry = "SELECT ID,Local,IID FROM Fontes GROUP BY ID, Local,IID HAVING Local Like ('%" & parametro & "%');"
-            PopulateDGV(DataGridView2, qry)
-        End If
+            If (parametro <> "") Then
+                Dim qry = "SELECT ID,Local,IID FROM Fontes GROUP BY ID, Local,IID HAVING Local Like ('%" & parametro & "%');"
+                PopulateDGV(DataGridView2, qry)
+            End If
+            TabControl1.SelectedTab = TabPage2
+
         End If
     End Sub
 
@@ -702,13 +718,13 @@ Public Class Form1
             MsgBox("Conecte-se para iniciar sessão!")
         Else
 
-            If FolderBrowserDialog1.ShowDialog() Then
-            Dim i = 0
-            Try
-                conn.Execute("CREATE TABLE Fontes")
-                conn.Execute("ALTER TABLE Fontes ADD COLUMN ID Number;")
-                conn.Execute("ALTER TABLE Fontes ADD COLUMN Local Text")
-                conn.Execute("ALTER TABLE Fontes ADD COLUMN IID Text")
+            If FolderBrowserDialog1.ShowDialog() = DialogResult.OK Then
+                Dim i = 0
+                Try
+                    conn.Execute("CREATE TABLE Fontes")
+                    conn.Execute("ALTER TABLE Fontes ADD COLUMN ID Number;")
+                    conn.Execute("ALTER TABLE Fontes ADD COLUMN Local Text")
+                    conn.Execute("ALTER TABLE Fontes ADD COLUMN IID Text")
 
                     For Each foundFile As String In My.Computer.FileSystem.GetFiles(FolderBrowserDialog1.SelectedPath)
 
@@ -718,10 +734,10 @@ Public Class Form1
                         conn.Execute("INSERT INTO Fontes(ID,Local,IID) VALUES ('" & i & "','" & nomeArquivo & "','')")
                     Next
                 Catch ex As Exception
-                MsgBox(ex.Message)
+                    MsgBox(ex.Message)
 
-            End Try
-        End If
+                End Try
+            End If
         End If
     End Sub
 

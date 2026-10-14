@@ -116,30 +116,6 @@ Namespace My
         
         <Global.System.Configuration.UserScopedSettingAttribute(),  _
          Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.Configuration.DefaultSettingValueAttribute("C:\genealogia - Copia (7)\bin\Release\net8.0-windows")>  _
-        Public Property xmlFolder() As String
-            Get
-                Return CType(Me("xmlFolder"),String)
-            End Get
-            Set
-                Me("xmlFolder") = value
-            End Set
-        End Property
-        
-        <Global.System.Configuration.UserScopedSettingAttribute(),  _
-         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.Configuration.DefaultSettingValueAttribute("gedcom")>  _
-        Public Property gedComFolder() As String
-            Get
-                Return CType(Me("gedComFolder"),String)
-            End Get
-            Set
-                Me("gedComFolder") = value
-            End Set
-        End Property
-        
-        <Global.System.Configuration.UserScopedSettingAttribute(),  _
-         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
          Global.System.Configuration.DefaultSettingValueAttribute("True")>  _
         Public Property radiobuttonutf8() As Boolean
             Get
@@ -160,6 +136,27 @@ Namespace My
             Set
                 Me("fontesFolder") = value
             End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("gedcom")>  _
+        Public Property gedcomFolder() As String
+            Get
+                Return CType(Me("gedcomFolder"),String)
+            End Get
+            Set
+                Me("gedcomFolder") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.ApplicationScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("xml")>  _
+        Public ReadOnly Property xmlFolder() As String
+            Get
+                Return CType(Me("xmlFolder"),String)
+            End Get
         End Property
     End Class
 End Namespace

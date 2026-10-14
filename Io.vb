@@ -5,7 +5,7 @@ Imports System.Runtime.Intrinsics.X86
 Imports System.Text
 Imports System.Text.RegularExpressions
 Module IO
-    Public Const kInputFileName = "C:\Users\acaci\OneDrive\Documents\NovaBase_ansi.ged"
+    'Public Const kInputFileName = "C:\Users\acaci\OneDrive\Documents\NovaBase_ansi.ged"
     Const kForReading = 1
     Const kForWriting = 2
     Const kForAppending = 8

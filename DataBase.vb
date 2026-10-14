@@ -56,7 +56,7 @@ Module DataBase
 
 		Else
 			'... utiliza os valores embutidos
-			InputFileName = kInputFileName
+			InputFileName = My.Settings.defaultInputFile
 			TableName = kTableName
 
 		End If

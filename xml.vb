@@ -54,8 +54,8 @@ Module XML
     End Sub
 
     Sub stopXML()
-        inpxmlDoc.save("Membros.xml")
-        outxmlDoc.save("Familias.xml")
+        inpxmlDoc.save(My.Settings.xmlFolder & "\Membros.xml")
+        outxmlDoc.save(My.Settings.xmlFolder & "\Familias.xml")
         inpxmlDoc = Nothing
         membros = Nothing
         inst = Nothing
@@ -69,7 +69,7 @@ Module XML
 
         Select Case (tk_number)
 
-            Case EnumToken.TK_EOL
+            Case EnumToken.TK_EOL           'fim de linha
 
                 Select Case (tag)
                     Case "SOUR"
@@ -222,7 +222,7 @@ Module XML
                         FAM = match.Value
 
                         If FAM = 1 Then
-                            Att = inpxmlDoc.createAttribute("xmlns:myNS")           'Cria um atributo
+                            Att = inpxmlDoc.createAttribute("xmlns:myNS")           'Cria um atributo para documento de entrada
                             Att.value = "uri:ged2xml2"                  'Dá um valor
                             namedNodeMap = membros.attributes           'Obtém atributos do nó
                             namedNodeMap.setNamedItem(Att)              'Insere novo atributo
@@ -496,7 +496,7 @@ Module XML
         pessoa = 0
 
         For Each l In fileReader
-            For Each c In l
+            For Each c In l                 'para caractere na linha
                 If (c <> " ") Then
                     p = p & c
                 Else
@@ -552,7 +552,7 @@ Module XML
 
     Sub xmlns()
         Dim xmldoc As New XmlDocument()
-        xmldoc.Load("Familias.xml")
+        xmldoc.Load(My.Settings.xmlFolder & "\Familias.xml")
         Dim nsmgr As New XmlNamespaceManager(xmldoc.NameTable)
         nsmgr.AddNamespace("myNS", "uri:ged2xml2")
         nsmgr.AddNamespace("f", "family")
