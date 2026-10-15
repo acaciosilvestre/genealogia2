@@ -64,32 +64,18 @@ Module IO
         fs = Nothing
     End Sub
     Sub Insere()
-        Try
-            'Escape values to reduce risco de SQL injection simples
-            Dim enome = Utils.EscapeSql(nome)
-            Dim enasc = Utils.EscapeSql(nasc)
-            Dim ebloc = Utils.EscapeSql(bloc)
-            Dim emort = Utils.EscapeSql(mort)
-            Dim edloc = Utils.EscapeSql(dloc)
-            Dim ebatismo = Utils.EscapeSql(batismo)
-            Dim esepulta = Utils.EscapeSql(sepulta)
-            Dim esloc = Utils.EscapeSql(sloc)
-
-            conn.Execute("INSERT INTO Membros(ID,Nome,Nascimento,LocalNascimento,Falecimento,LocalFalecimento,Batismo,LocalBatismo,Sepultamento,LocalSepultamento) VALUES ('" & _
-            pessoa & "','" & enome & "','" & enasc & "','" & ebloc & "','" & emort & "','" & edloc & "','" & ebatismo & "','" & ebloc & "','" & esepulta & "','" & esloc & "')")
-        Catch ex As Exception
-            Debug.WriteLine("Insere error: " & ex.Message)
-        End Try
+        'On Error Resume Next
+        conn.Execute("INSERT INTO Membros(ID,Nome,Nascimento,LocalNascimento,Falecimento,LocalFalecimento,Batismo,LocalBatismo,Sepultamento,LocalSepultamento) VALUES ('" &
+pessoa & "','" & nome & "','" & nasc & "','" & bloc & "','" & mort & "','" & dloc & "','" & batismo & "','" & bloc & "','" & sepulta & "','" & sloc & "')")
     End Sub
 
 
     Sub token2(tk_number As Integer, tk As String)
 
-        Static level, xref_id, tag, line_value, evento
+        Static level, xref_id, tag, line_value, evento As String
         Select Case (tk_number)
 
             Case EnumToken.TK_EOL
-
                 Select Case (tag)
                     'GEDCOM HEADER
                     Case "TYPE"
@@ -135,6 +121,7 @@ Module IO
                             Dim match As Match
                             match = Regex.Match(xref_id, "\d+")
                             pessoa = match.Value
+                            Form1.ToolStripStatusLabel1.Text = "Registro: " & pessoa & "/" & nome
                         End If
 
                     Case "SEX"
@@ -177,35 +164,36 @@ Module IO
                         tag = ""
                         evento = ""
                         'pessoa = pessoa + 1
-                        Form1.ToolStripStatusLabel1.Text = nome
+                        'Form1.ToolStripStatusLabel1.Text = nome
 
-                        Insere()
-                        nome = ""
-                        sex = ""
-                        nasc = ""
-                        mort = ""
-                        batismo = ""
-                        sepulta = ""
-                        local = ""
-                        evento = ""
-                        bloc = ""
-                        dloc = ""
-                        cloc = ""
-                        sloc = ""
 
                     Case "FAMC"
                         'MsgBox("FAMC :" & line_value)
 
                     Case "FAMS"
                         'MsgBox("FAMS :" & line_value)
-
                 End Select
 
 
 
             Case EnumToken.TK_UM
                 level = tk
+                If level = 0 And pessoa >= 1 Then
+                    Insere()
+                    nome = ""
+                    sex = ""
+                    nasc = ""
+                    mort = ""
+                    batismo = ""
+                    sepulta = ""
+                    local = ""
+                    evento = ""
+                    bloc = ""
+                    dloc = ""
+                    cloc = ""
+                    sloc = ""
 
+                End If
             Case EnumToken.TK_DOIS
 
                 Select Case (level)
@@ -274,6 +262,9 @@ Module IO
                         If tk = "INDI" Then
                             header = False
                             tag = ""
+                        ElseIf tk = "FAM" Then
+                            pessoa = 0
+                            'MsgBox(xref_id)
                         End If
 
                     Case EnumLevel.LEVEL_1
@@ -315,13 +306,11 @@ Module IO
         'startFS2(My.Settings.defaultInputFile)
         Dim l, c, p As String
         Dim i As Integer
-
         p = ""
         i = 0
         pessoa = 0
 
         For Each l In fileReader
-
             For Each c In l
                 If (c <> " ") Then
                     p = p & c

@@ -320,12 +320,18 @@ Module XML
                         familia.appendChild(crianca)
 
                         Dim ncrianca = outxmlDoc.CreateElement("Nome")
-                        ncrianca.text = objNode.text
-                        crianca.appendchild(ncrianca)
+
+                        If IsNothing(objNode) Then
+                            ncrianca.text = ""
+                        Else
+                            ncrianca.text = objNode.text
+                        End If
+                        'ncrianca.text = objNode.text
+                        crianca.appendChild(ncrianca)
 
                         Dim fcrianca = outxmlDoc.CreateElement("Familia")
                         fcrianca.text = FAM
-                        crianca.appendchild(fcrianca)
+                        crianca.appendChild(fcrianca)
 
                         objNode = Nothing
                 End Select
@@ -494,6 +500,7 @@ Module XML
         initXML()
         i = 0
         pessoa = 0
+        p = ""
 
         For Each l In fileReader
             For Each c In l                 'para caractere na linha
@@ -544,9 +551,11 @@ Module XML
                 End If
             Catch ex As Exception
                 MsgBox("Erro: " & ex.Message)
+                xpath = Nothing
             End Try
         Else
             MsgBox("Nenhum xml carregado. ")
+            xpath = Nothing
         End If
     End Function
 

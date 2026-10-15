@@ -30,11 +30,6 @@
         ' Set the property value.
         Me.PrivateField = xmlFile
         xmlDoc = CreateObject("Msxml2.DOMDocument.6.0")
-        Try
-            xmlDoc.load(xmlFile)
-        Catch ex As Exception
-            Debug.WriteLine("xmlC load error: " & ex.Message)
-            xmlDoc = Nothing
-        End Try
+        xmlDoc.load(xmlFile)
     End Sub
 End Class

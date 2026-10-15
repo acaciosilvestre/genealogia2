@@ -34,115 +34,93 @@ Public Class Form1
                 Case "igual a"
                     parametro = InputBox("Digite o ID: ", sender.ToString)
                     If IsNumeric(parametro) Then
-                        Dim id = CInt(parametro)
-                        qry = "SELECT * FROM Membros WHERE ID = " & id & " ;"
+                        qry = "SELECT * FROM Membros WHERE ID = " & parametro & " ;"
                     End If
 
                 Case "menor que"
                     parametro = InputBox("Digite o ID: ", sender.ToString)
                     If IsNumeric(parametro) Then
-                        Dim id = CInt(parametro)
-                        qry = "SELECT * FROM Membros WHERE ID <= " & id & " ;"
+                        qry = "SELECT * FROM Membros WHERE ID <= " & parametro & " ;"
                     End If
 
                 Case "maior que"
                     parametro = InputBox("Digite o ID: ", sender.ToString)
                     If IsNumeric(parametro) Then
-                        Dim id = CInt(parametro)
-                        qry = "SELECT * FROM Membros WHERE ID >= " & id & " ;"
+                        qry = "SELECT * FROM Membros WHERE ID >= " & parametro & " ;"
                     End If
 
                 Case "Nome Parcial"
                     parametro = InputBox("Digite o Nome: ", sender.ToString)
                     If (parametro <> "" And (Not IsNumeric(parametro))) Then
-                        Dim enparam = Utils.EscapeSql(parametro)
-                        qry = "SELECT ID,Nome,Nascimento,LocalNascimento,Falecimento,LocalFalecimento,Batismo,LocalBatismo,Sepultamento,LocalSepultamento FROM Membros GROUP BY ID,Nome,Nascimento,LocalNascimento,Falecimento,LocalFalecimento,Batismo,LocalBatismo,Sepultamento,LocalSepultamento HAVING Nome LIKE ('%" & enparam & "%');"
+                        qry = "SELECT ID,Nome,Nascimento,LocalNascimento,Falecimento,LocalFalecimento,Batismo,LocalBatismo,Sepultamento,LocalSepultamento FROM Membros GROUP BY ID,Nome,Nascimento,LocalNascimento,Falecimento,LocalFalecimento,Batismo,LocalBatismo,Sepultamento,LocalSepultamento HAVING Nome LIKE ('%" & parametro & "%');"
                     End If
 
                 Case "Nome Exato"
                     parametro = InputBox("Digite o Nome: ", sender.ToString)
                     If (parametro <> "" And (Not IsNumeric(parametro))) Then
-                        Dim enparam = Utils.EscapeSql(parametro)
-                        qry = "SELECT * FROM Membros WHERE Nome = '" & enparam & "' ;"
+                        qry = "SELECT * FROM Membros WHERE Nome = '" & parametro & "' ;"
                     End If
 
                 Case "Pesquisa Parcial no Campo Atual"
-                    parametro = InputBox("Digite o valor: ", sender.ToString)
+                    parametro = InputBox("Digite o valor: ", sender.ToString & ": " & Campos(DataGridView1.CurrentCell.ColumnIndex))
                     If (parametro <> "") Then
-                        Dim enparam = Utils.EscapeSql(parametro)
-                        Dim colIdx = DataGridView1.CurrentCell.ColumnIndex
-                        If colIdx >= 0 And colIdx <= UBound(Campos) Then
-                            Dim colName = Campos(colIdx)
-                            qry = "SELECT ID,Nome,Nascimento,LocalNascimento,Falecimento,LocalFalecimento,Batismo,LocalBatismo,Sepultamento,LocalSepultamento FROM Membros GROUP BY ID,Nome,Nascimento,LocalNascimento,Falecimento,LocalFalecimento,Batismo,LocalBatismo,Sepultamento,LocalSepultamento HAVING " & colName & " LIKE ('%" & enparam & "%');"
+                        If Campos(DataGridView1.CurrentCell.ColumnIndex) = "ID" And IsNumeric(parametro) Then
+                            qry = "SELECT ID,Nome,Nascimento,LocalNascimento,Falecimento,LocalFalecimento,Batismo,LocalBatismo,Sepultamento,LocalSepultamento FROM Membros GROUP BY ID,Nome,Nascimento,LocalNascimento,Falecimento,LocalFalecimento,Batismo,LocalBatismo,Sepultamento,LocalSepultamento HAVING " & Campos(DataGridView1.CurrentCell.ColumnIndex) & " = " & parametro & ";"
+                        ElseIf Campos(DataGridView1.CurrentCell.ColumnIndex) = "ID" And Not IsNumeric(parametro) Then
+                            Exit Sub
                         Else
-                            qry = ""
+                            'qry = "SELECT ID,Nome,Nascimento,LocalNascimento,Falecimento,LocalFalecimento,Batismo,LocalBatismo,Sepultamento,LocalSepultamento FROM Membros GROUP BY ID,Nome,Nascimento,LocalNascimento,Falecimento,LocalFalecimento,Batismo,LocalBatismo,Sepultamento,LocalSepultamento HAVING " & Campos(DataGridView1.CurrentCell.ColumnIndex) & " = '" & parametro & "';"
+                            qry = "SELECT ID,Nome,Nascimento,LocalNascimento,Falecimento,LocalFalecimento,Batismo,LocalBatismo,Sepultamento,LocalSepultamento FROM Membros GROUP BY ID,Nome,Nascimento,LocalNascimento,Falecimento,LocalFalecimento,Batismo,LocalBatismo,Sepultamento,LocalSepultamento HAVING " & Campos(DataGridView1.CurrentCell.ColumnIndex) & " LIKE ('%" & parametro & "%');"
                         End If
                     End If
 
-                Case "Pesquisa Exata no Campo Atual"
-
-                    parametro = InputBox("Digite o valor: ", sender.ToString)
+                        Case "Pesquisa Exata no Campo Atual"
+                    parametro = InputBox("Digite o valor: ", sender.ToString & ": " & Campos(DataGridView1.CurrentCell.ColumnIndex))
                     If (parametro <> "") Then
-                        Dim enparam = Utils.EscapeSql(parametro)
-                        Dim colIdx2 = DataGridView1.CurrentCell.ColumnIndex
-                        If colIdx2 >= 0 And colIdx2 <= UBound(Campos) Then
-                            Dim colName2 = Campos(colIdx2)
-                            qry = "SELECT * FROM Membros WHERE " & colName2 & " = '" & enparam & "' ;"
-                        Else
-                            qry = ""
-                        End If
+                        qry = "SELECT * FROM Membros WHERE " & Campos(DataGridView1.CurrentCell.ColumnIndex) & " = " & parametro & ";"
                     End If
 
                 Case Else
                     qry = txtQuery.Text
             End Select
 
-            PopulateDGV(DataGridView1, qry)
-            DirectCast(MenuStrip1.Items(3), ToolStripMenuItem).DropDownItems(3).Enabled = True
-            DirectCast(MenuStrip1.Items(3), ToolStripMenuItem).DropDownItems(4).Enabled = True
+            If qry <> "" Then
+                PopulateDGV(DataGridView1, qry)
+                TabControl1.SelectedTab = TabPage1
+                DirectCast(MenuStrip1.Items(3), ToolStripMenuItem).DropDownItems(3).Enabled = True
+                DirectCast(MenuStrip1.Items(3), ToolStripMenuItem).DropDownItems(4).Enabled = True
+            End If
         End If
     End Sub
 
     Sub PopulateDGV(data_grid As DataGridView, qry As String)
         If (qry <> "") Then
             populatingDGV = True
-            Try
-                rs = conn.execute(qry)
+            rs = conn.execute(qry)
 
-                Static Dim i
+            Static Dim i
 
-                With data_grid
-                    .Rows.Clear()
-                    .Columns.Clear()
+            With data_grid
+                .Rows.Clear()
+                .Columns.Clear()
 
-                    If Not (rs Is Nothing) Then
-                        For Each r In rs.fields
-                            .Columns.Add(r.name, r.name)
-                        Next
+                For Each r In rs.fields
+                    .Columns.Add(r.name, r.name)
+                Next
 
-                        i = 0
+                i = 0
 
-                        While Not rs.eof()
-                            .Rows.Add()
-                            For Each r In rs.fields
-                                .Rows(i).Cells(r.name).Value = r.value
-                            Next
-                            i = i + 1
-                            rs.movenext()
-                        End While
-                        If .Columns.Count > 1 Then
-                            .Columns(1).Width = 400
-                        End If
-                        .Refresh()
-                    Else
-                        ToolStripStatusLabel1.Text = "Consulta retornou vazio ou falhou."
-                    End If
-
-                End With
-            Catch ex As Exception
-                ToolStripStatusLabel1.Text = "Erro ao executar query: " & ex.Message
-                Debug.WriteLine("PopulateDGV error: " & ex.Message)
-            End Try
+                While Not rs.eof()
+                    .Rows.Add()
+                    For Each r In rs.fields
+                        .Rows(i).Cells(r.name).Value = r.value
+                    Next
+                    i = i + 1
+                    rs.movenext()
+                End While
+                .Columns(1).Width = 400
+                .Refresh()
+            End With
             populatingDGV = False
         End If
     End Sub
@@ -397,8 +375,7 @@ Public Class Form1
     End Sub
     Private Sub TreeView1_NodeMouseDoubleClick(sender As Object, e As TreeNodeMouseClickEventArgs) Handles TreeView1.NodeMouseDoubleClick
         Dim qry As String
-        Dim en = Utils.EscapeSql(e.Node.Text)
-        qry = "SELECT * FROM Membros WHERE Nome = '" & en & "' ;"
+        qry = "SELECT * FROM Membros WHERE Nome = '" & e.Node.Text & "' ;"
         PopulateDGV(DataGridView1, qry)
         TabControl1.SelectedTab = TabPage1
 
@@ -592,7 +569,6 @@ Public Class Form1
             Dim qry = "SELECT * FROM Fontes"
             PopulateDGV(DataGridView2, qry)
             TabControl1.SelectedTab = TabPage2
-
         End If
     End Sub
 
@@ -602,12 +578,10 @@ Public Class Form1
         Else
             Dim parametro = InputBox("Digite o valor a ser pesquisado: ", sender.ToString)
             If (parametro <> "") Then
-                Dim enparam = Utils.EscapeSql(parametro)
-                Dim qry = "SELECT ID,Local,IID FROM Fontes GROUP BY ID, Local,IID HAVING Local Like ('%" & enparam & "%');"
+                Dim qry = "SELECT ID,Local,IID FROM Fontes GROUP BY ID, Local,IID HAVING Local Like ('%" & parametro & "%');"
                 PopulateDGV(DataGridView2, qry)
+                TabControl1.SelectedTab = TabPage2
             End If
-            TabControl1.SelectedTab = TabPage2
-
         End If
     End Sub
 
@@ -627,30 +601,15 @@ Public Class Form1
     Private Sub Datagridview2_CellValueChanged(sender As Object, e As DataGridViewCellEventArgs) Handles DataGridView2.CellValueChanged
         If Not populatingDGV Then
             Dim field = DataGridView2.Columns(DataGridView2.CurrentCell.ColumnIndex).HeaderText
-            Dim value = Utils.EscapeSql(If(DataGridView2.CurrentCell.Value, ""))
-            Dim id = CInt(DataGridView2.CurrentRow.Cells(0).Value)
-            Try
-                conn.execute("UPDATE Fontes SET [" & field & "] = '" & value & "' WHERE ID = " & id)
-            Catch ex As Exception
-                Debug.WriteLine("Datagridview2 update error: " & ex.Message)
-            End Try
+            conn.execute("UPDATE Fontes " _
+            & "SET " & field & " = '" & DataGridView2.CurrentCell.Value & "' WHERE ID = " & DataGridView2.CurrentRow.Cells(0).Value)
         End If
     End Sub
 
     Private Sub Datagridview1_CellValueChanged(sender As Object, e As DataGridViewCellEventArgs) Handles DataGridView1.CellValueChanged
         If Not populatingDGV Then
-            Dim colIdx = DataGridView1.CurrentCell.ColumnIndex
-            If colIdx >= 0 And colIdx <= UBound(Campos) Then
-                Dim colName = Campos(colIdx)
-                Dim value = Utils.EscapeSql(If(DataGridView1.CurrentCell.Value, ""))
-                Dim id = CInt(DataGridView1.CurrentRow.Cells(0).Value)
-                Dim qry = "UPDATE Membros SET [" & colName & "] = '" & value & "' WHERE ID = " & id
-                Try
-                    conn.execute(qry)
-                Catch ex As Exception
-                    Debug.WriteLine("Datagridview1 update error: " & ex.Message)
-                End Try
-            End If
+            Dim qry = "UPDATE Membros SET " & Campos(DataGridView1.CurrentCell.ColumnIndex) & " = '" & DataGridView1.CurrentCell.Value & "' WHERE ID = " & DataGridView1.CurrentRow.Cells(0).Value
+            conn.execute(qry)
         End If
 
     End Sub
