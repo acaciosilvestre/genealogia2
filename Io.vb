@@ -168,10 +168,10 @@ pessoa & "','" & nome & "','" & nasc & "','" & bloc & "','" & mort & "','" & dlo
 
 
                     Case "FAMC"
-                        'MsgBox("FAMC :" & line_value)
+                        'MsgBox("FAMC :" & line_value)     'line_value=ID da familia da pessoa qdo crianca
 
                     Case "FAMS"
-                        'MsgBox("FAMS :" & line_value)
+                        'MsgBox("FAMS :" & line_value)      'line_value=ID da familia em que é cônjuge
                 End Select
 
 
@@ -232,6 +232,10 @@ pessoa & "','" & nome & "','" & nasc & "','" & bloc & "','" & mort & "','" & dlo
                                 'SOUR
                                 'CHAN
                             Case "CHAR"
+                            Case "HUSB"
+                                'MsgBox("HUSB: " & xref_id)
+                            Case "WIFE"
+                                'MsgBox("WIFE: " & xref_id)
 
                         End Select
 
@@ -264,12 +268,20 @@ pessoa & "','" & nome & "','" & nasc & "','" & bloc & "','" & mort & "','" & dlo
                             tag = ""
                         ElseIf tk = "FAM" Then
                             pessoa = 0
-                            'MsgBox(xref_id)
+                            'MsgBox("FAM: " & xref_id)
                         End If
 
                     Case EnumLevel.LEVEL_1
 
                         line_value = tk
+                        Select Case (tag)
+                            Case "HUSB"
+                                'MsgBox("HUSB: " & tk & "FAM: " & xref_id)
+                            Case "WIFE"
+                                'MsgBox("WIFE: " & tk & "FAM: " & xref_id)
+                            Case "CHIL"
+                                'MsgBox("CHIL: " & tk & "FAM: " & xref_id)
+                        End Select
 
                     Case EnumLevel.LEVEL_2
                         'MsgBox(evento & tag & " = " & tk)
