@@ -337,7 +337,7 @@ Partial Class Form1
         ' 
         IncluirToolStripMenuItem.DropDownItems.AddRange(New ToolStripItem() {PastaToolStripMenuItem, IndividualToolStripMenuItem})
         IncluirToolStripMenuItem.Name = "IncluirToolStripMenuItem"
-        IncluirToolStripMenuItem.Size = New Size(224, 26)
+        IncluirToolStripMenuItem.Size = New Size(155, 26)
         IncluirToolStripMenuItem.Text = "incluir"
         ' 
         ' PastaToolStripMenuItem
@@ -368,13 +368,13 @@ Partial Class Form1
         ' ExibirToolStripMenuItem1
         ' 
         ExibirToolStripMenuItem1.Name = "ExibirToolStripMenuItem1"
-        ExibirToolStripMenuItem1.Size = New Size(224, 26)
+        ExibirToolStripMenuItem1.Size = New Size(155, 26)
         ExibirToolStripMenuItem1.Text = "exibir"
         ' 
         ' PesquisarToolStripMenuItem1
         ' 
         PesquisarToolStripMenuItem1.Name = "PesquisarToolStripMenuItem1"
-        PesquisarToolStripMenuItem1.Size = New Size(224, 26)
+        PesquisarToolStripMenuItem1.Size = New Size(155, 26)
         PesquisarToolStripMenuItem1.Text = "pesquisar"
         ' 
         ' OpenFileDialog1

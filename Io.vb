@@ -29,9 +29,11 @@ Module IO
     Public InputFileName, InputFileExists, fs, a, b, stdout
     Public DataBaseName, DataBaseExists
     Public conn
-    Public rs, TableName, Campos(9), connectionString
+    Public rs, TableName, Campos(11), connectionString
     Dim pessoa = 0, linha, nome, sex, nasc, evento, local
+    Dim familia = 0
     Dim bloc, batismo, cloc, mort, dloc, sepulta, sloc ', fami
+    Dim famc, fams, husb, wife, chil, mloc, mdate, fam
     Dim header As Boolean
     Public inpEnc = "ascii"
     Public outEnc = "ascii"
@@ -65,8 +67,8 @@ Module IO
     End Sub
     Sub Insere()
         'On Error Resume Next
-        conn.Execute("INSERT INTO Membros(ID,Nome,Nascimento,LocalNascimento,Falecimento,LocalFalecimento,Batismo,LocalBatismo,Sepultamento,LocalSepultamento) VALUES ('" &
-pessoa & "','" & nome & "','" & nasc & "','" & bloc & "','" & mort & "','" & dloc & "','" & batismo & "','" & bloc & "','" & sepulta & "','" & sloc & "')")
+        conn.Execute("INSERT INTO Membros(ID,Nome,Nascimento,LocalNascimento,Falecimento,LocalFalecimento,Batismo,LocalBatismo,Sepultamento,LocalSepultamento,famc,fams) VALUES ('" &
+pessoa & "','" & nome & "','" & nasc & "','" & bloc & "','" & mort & "','" & dloc & "','" & batismo & "','" & bloc & "','" & sepulta & "','" & sloc & "','" & famc & "','" & fams & "')")
     End Sub
 
 
@@ -143,6 +145,8 @@ pessoa & "','" & nome & "','" & nasc & "','" & bloc & "','" & mort & "','" & dlo
                                     batismo = line_value
                                 Case "BURI"
                                     sepulta = line_value
+                                Case "MARR"
+                                    mdate = line_value
                             End Select
 
                         End If
@@ -157,6 +161,8 @@ pessoa & "','" & nome & "','" & nasc & "','" & bloc & "','" & mort & "','" & dlo
                                 cloc = Replace(line_value, Chr(39), "")
                             Case "BURI"
                                 sloc = Replace(line_value, Chr(39), "")
+                            Case "MARR"
+                                mloc = line_value
                         End Select
 
                     Case "CHAN"
@@ -169,9 +175,10 @@ pessoa & "','" & nome & "','" & nasc & "','" & bloc & "','" & mort & "','" & dlo
 
                     Case "FAMC"
                         'MsgBox("FAMC :" & line_value)     'line_value=ID da familia da pessoa qdo crianca
-
+                        famc = line_value
                     Case "FAMS"
                         'MsgBox("FAMS :" & line_value)      'line_value=ID da familia em que é cônjuge
+                        fams = line_value
                 End Select
 
 
@@ -192,6 +199,9 @@ pessoa & "','" & nome & "','" & nasc & "','" & bloc & "','" & mort & "','" & dlo
                     dloc = ""
                     cloc = ""
                     sloc = ""
+                    famc = ""
+                    fams = ""
+
 
                 End If
             Case EnumToken.TK_DOIS
@@ -217,7 +227,7 @@ pessoa & "','" & nome & "','" & nasc & "','" & bloc & "','" & mort & "','" & dlo
 
                             Case "SEX"
                             'SEX
-                            Case "BIRT", "CHR", "DEAT", "BURI", "EVEN"
+                            Case "BIRT", "CHR", "DEAT", "BURI", "EVEN", "MARR"
                                 evento = tag
                                 'BIRT
                                 'CHR
@@ -244,7 +254,7 @@ pessoa & "','" & nome & "','" & nasc & "','" & bloc & "','" & mort & "','" & dlo
                         Select Case (tag)
                             Case "DATE", "PLAC"
                                 'NAME
-                                'MsgBox(evento & tag)
+                                  'MsgBox(evento & tag)
                                 'DATE
                                 'PLACE
 
@@ -268,7 +278,17 @@ pessoa & "','" & nome & "','" & nasc & "','" & bloc & "','" & mort & "','" & dlo
                             tag = ""
                         ElseIf tk = "FAM" Then
                             pessoa = 0
+                            familia = familia + 1
                             'MsgBox("FAM: " & xref_id)
+                            If familia > 1 Then
+                                'Insere3
+                                'MsgBox(fam & " = " & husb & " : " & wife & " : " & mloc & " : " & mdate)
+                                husb = ""
+                                wife = ""
+                                mloc = ""
+                                mdate = ""
+                            End If
+                            fam = xref_id
                         End If
 
                     Case EnumLevel.LEVEL_1
@@ -277,9 +297,12 @@ pessoa & "','" & nome & "','" & nasc & "','" & bloc & "','" & mort & "','" & dlo
                         Select Case (tag)
                             Case "HUSB"
                                 'MsgBox("HUSB: " & tk & "FAM: " & xref_id)
+                                husb = tk
                             Case "WIFE"
                                 'MsgBox("WIFE: " & tk & "FAM: " & xref_id)
+                                wife = tk
                             Case "CHIL"
+                                'Insere2
                                 'MsgBox("CHIL: " & tk & "FAM: " & xref_id)
                         End Select
 

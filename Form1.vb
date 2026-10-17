@@ -52,7 +52,7 @@ Public Class Form1
                 Case "Nome Parcial"
                     parametro = InputBox("Digite o Nome: ", sender.ToString)
                     If (parametro <> "" And (Not IsNumeric(parametro))) Then
-                        qry = "SELECT ID,Nome,Nascimento,LocalNascimento,Falecimento,LocalFalecimento,Batismo,LocalBatismo,Sepultamento,LocalSepultamento FROM Membros GROUP BY ID,Nome,Nascimento,LocalNascimento,Falecimento,LocalFalecimento,Batismo,LocalBatismo,Sepultamento,LocalSepultamento HAVING Nome LIKE ('%" & parametro & "%');"
+                        qry = "SELECT ID,Nome,Nascimento,LocalNascimento,Falecimento,LocalFalecimento,Batismo,LocalBatismo,Sepultamento,LocalSepultamento,famc,fams FROM Membros GROUP BY ID,Nome,Nascimento,LocalNascimento,Falecimento,LocalFalecimento,Batismo,LocalBatismo,Sepultamento,LocalSepultamento,famc,fams HAVING Nome LIKE ('%" & parametro & "%');"
                     End If
 
                 Case "Nome Exato"
@@ -65,19 +65,25 @@ Public Class Form1
                     parametro = InputBox("Digite o valor: ", sender.ToString & ": " & Campos(DataGridView1.CurrentCell.ColumnIndex))
                     If (parametro <> "") Then
                         If Campos(DataGridView1.CurrentCell.ColumnIndex) = "ID" And IsNumeric(parametro) Then
-                            qry = "SELECT ID,Nome,Nascimento,LocalNascimento,Falecimento,LocalFalecimento,Batismo,LocalBatismo,Sepultamento,LocalSepultamento FROM Membros GROUP BY ID,Nome,Nascimento,LocalNascimento,Falecimento,LocalFalecimento,Batismo,LocalBatismo,Sepultamento,LocalSepultamento HAVING " & Campos(DataGridView1.CurrentCell.ColumnIndex) & " = " & parametro & ";"
+                            qry = "SELECT ID,Nome,Nascimento,LocalNascimento,Falecimento,LocalFalecimento,Batismo,LocalBatismo,Sepultamento,LocalSepultamento,famc,fams FROM Membros GROUP BY ID,Nome,Nascimento,LocalNascimento,Falecimento,LocalFalecimento,Batismo,LocalBatismo,Sepultamento,LocalSepultamento,famc,fams HAVING " & Campos(DataGridView1.CurrentCell.ColumnIndex) & " = " & parametro & ";"
                         ElseIf Campos(DataGridView1.CurrentCell.ColumnIndex) = "ID" And Not IsNumeric(parametro) Then
                             Exit Sub
                         Else
-                            'qry = "SELECT ID,Nome,Nascimento,LocalNascimento,Falecimento,LocalFalecimento,Batismo,LocalBatismo,Sepultamento,LocalSepultamento FROM Membros GROUP BY ID,Nome,Nascimento,LocalNascimento,Falecimento,LocalFalecimento,Batismo,LocalBatismo,Sepultamento,LocalSepultamento HAVING " & Campos(DataGridView1.CurrentCell.ColumnIndex) & " = '" & parametro & "';"
-                            qry = "SELECT ID,Nome,Nascimento,LocalNascimento,Falecimento,LocalFalecimento,Batismo,LocalBatismo,Sepultamento,LocalSepultamento FROM Membros GROUP BY ID,Nome,Nascimento,LocalNascimento,Falecimento,LocalFalecimento,Batismo,LocalBatismo,Sepultamento,LocalSepultamento HAVING " & Campos(DataGridView1.CurrentCell.ColumnIndex) & " LIKE ('%" & parametro & "%');"
+                            qry = "SELECT ID,Nome,Nascimento,LocalNascimento,Falecimento,LocalFalecimento,Batismo,LocalBatismo,Sepultamento,LocalSepultamento,famc,fams FROM Membros GROUP BY ID,Nome,Nascimento,LocalNascimento,Falecimento,LocalFalecimento,Batismo,LocalBatismo,Sepultamento,LocalSepultamento,famc,fams HAVING " & Campos(DataGridView1.CurrentCell.ColumnIndex) & " LIKE ('%" & parametro & "%');"
                         End If
                     End If
 
-                        Case "Pesquisa Exata no Campo Atual"
+                Case "Pesquisa Exata no Campo Atual"
                     parametro = InputBox("Digite o valor: ", sender.ToString & ": " & Campos(DataGridView1.CurrentCell.ColumnIndex))
                     If (parametro <> "") Then
-                        qry = "SELECT * FROM Membros WHERE " & Campos(DataGridView1.CurrentCell.ColumnIndex) & " = " & parametro & ";"
+                        If Campos(DataGridView1.CurrentCell.ColumnIndex) = "ID" And IsNumeric(parametro) Then
+                            qry = "SELECT * FROM Membros WHERE " & Campos(DataGridView1.CurrentCell.ColumnIndex) & " = " & parametro & ";"
+                        ElseIf Campos(DataGridView1.CurrentCell.ColumnIndex) = "ID" And Not IsNumeric(parametro) Then
+                            Exit Sub
+                        Else
+                            qry = "SELECT * FROM Membros WHERE " & Campos(DataGridView1.CurrentCell.ColumnIndex) & " = '" & parametro & "';"
+                        End If
+
                     End If
 
                 Case Else
@@ -140,18 +146,18 @@ Public Class Form1
         If Not rbutf8.Checked Then
             rbascii.Checked = True
         End If
-
-        Campos(0) = "ID"
-        Campos(1) = "Nome"
-        Campos(2) = "Nascimento"
-        Campos(3) = "LocalNascimento"
-        Campos(4) = "Falecimento"
-        Campos(5) = "LocalFalecimento"
-        Campos(6) = "Batismo"
-        Campos(7) = "LocalBatismo"
-        Campos(8) = "Sepultamento"
-        Campos(9) = "LocalSepultamento"
-
+        'Campos(0) = "ID"
+        'Campos(1) = "Nome"
+        'Campos(2) = "Nascimento"
+        'Campos(3) = "LocalNascimento"
+        'Campos(4) = "Falecimento"
+        'Campos(5) = "LocalFalecimento"
+        'Campos(6) = "Batismo"
+        'Campos(7) = "LocalBatismo"
+        'Campos(8) = "Sepultamento"
+        'Campos(9) = "LocalSepultamento"
+        'Campos(10) = "famc"
+        'Campos(11) = "fams"
         ShowStatus()
 
 
@@ -241,17 +247,6 @@ Public Class Form1
 
             End If
 
-            '        OpenFileDialog1.FileName = "*.xml"
-            '               If My.Settings.xmlFolder <> "" Then
-            '              OpenFileDialog1.InitialDirectory = My.Settings.xmlFolder
-            '         End If
-            '            If OpenFileDialog1.ShowDialog() = 1 Then
-            'My.Settings.xmlFolder = OpenFileDialog1.InitialDirectory
-            'My.Settings.Save()
-            '           loadingxml = True
-            '          LoadXML(OpenFileDialog1.FileName)
-            '         Else
-            '        loadingxml = False
         End If
     End Sub
 
@@ -294,8 +289,6 @@ Public Class Form1
         rs = CreateObject("adodb.recordset")
         conn.Open(connectionString)
         If conn.state = 1 Then
-            'Dim myimg = New Bitmap("C:\genealogia - Copia (7)\My Project\on64.png")
-            'PictureBox1.Image = myimg
             PictureBox1.Image = My.Resources.on64
             connected = True
             ShowStatus()
@@ -385,7 +378,6 @@ Public Class Form1
         TreeView1.Nodes.Clear()
         Dim ind As New Individuo(id)
         ind.SetIndividuo()
-
         Dim tindividuo As TreeNode = TreeView1.Nodes.Add(ind.nome)
 
         If (ind.iddoPai <> 0) Then

@@ -29,11 +29,11 @@ Public Class Individuo
     End Sub
 
     Public Sub SetIndividuo()
-        LoadXML("Membros.xml")
+        LoadXML("xml/Membros.xml")
         nome = xpath("//Membros/Individuo[@id='" & Me.id & "']/Nome")
         sexo = xpath("//Membros/Individuo[@id='" & Me.id & "']/Sex")
         fsftid = xpath("//Membros/Individuo[" & Me.id & "]/FSFTID")
-        LoadXML("Familias.xml")
+        LoadXML("xml/Familias.xml")
 
         'PAIS
         childFamily = xpath("//Familias/Familia/Crianca[@id='" & Me.id & "']/Familia")
