@@ -1,18 +1,30 @@
 ﻿
+Imports System.Xml
+
 Module DataBase
 	Sub createDataBase(DataBasePath)
-		Dim cat, field, db
+		Dim field, db
 
-		cat = CreateObject("ADOX.Catalog")
+		'cat = CreateObject("ADOX.Catalog")
+		'cat.Create("Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" & DataBasePath & ";")
+		'cat = Nothing
 
-		cat.Create("Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" & DataBasePath & ";")
 		db = CreateObject("DAO.DBEngine.120")
+		db.CreateDatabase(DataBasePath, ";langid=0x0416;", 128)
 		db.Begintrans
 		conn = db.OpenDatabase(DataBasePath)
 		' Aqui você pode adicionar tabelas, consultas, etc. ao banco de dados.
-		conn.Execute("CREATE TABLE " & TableName)
-		For Each field In Campos
-			conn.Execute("ALTER TABLE " & TableName & " ADD COLUMN " & field & ";")
+		Dim Tabelas As List(Of String) = New List(Of String) From {"Membros", "Familias", "Crianças"}
+		Dim flds(3) As List(Of String)
+		flds(0) = New List(Of String) From {"ID Number", "Nome Text", "Nascimento Text", "LocalNascimento Text", "Falecimento Text", "LocalFalecimento Text", "Batismo Text", "LocalBatismo Text", "Sepultamento Text", "LocalSepultamento Text", "famc Text", "fams Text"}
+		flds(1) = New List(Of String) From {"FID Text", "Marido Text", "Esposa Text", "Casamento Text", "Local Text"}
+		flds(2) = New List(Of String) From {"FID Text", "Criança Text"}
+
+		For Each Tabela In Tabelas
+			conn.Execute("CREATE TABLE " & Tabela)
+			For Each field In flds(Tabelas.IndexOf(Tabela))
+				conn.Execute("ALTER TABLE " & Tabela & " ADD COLUMN " & field & ";")
+			Next
 		Next
 
 		startFS2(InputFileName)
@@ -22,7 +34,6 @@ Module DataBase
 		conn.close
 		conn = Nothing
 		db = Nothing
-		cat = Nothing
 
 	End Sub
 
@@ -47,9 +58,19 @@ Module DataBase
 					TableName = .selectSingleNode("//TableName").text
 					Dim i
 					For i = 0 To Campos.Count - 1
-						Campos(i) = .selectSingleNode("//Fields/FDName[" & (i + 1) & "]").text _
+						IO.Campos(i) = .selectSingleNode("//Fields/FDName[" & (i + 1) & "]").text _
 							& " " & .selectSingleNode("//Fields/FDType[" & (i + 1) & "]").text
 					Next
+					'MsgBox(.selectSingleNode("//TableName[2]").text)
+					Dim tb = .selectSingleNode("//Tables")
+                    For Each n In tb.ChildNodes
+                        Dim f = n.selectSingleNode("//Fields")
+						For Each f In n.ChildNodes
+							'MsgBox(f.text)
+						Next
+					Next
+					'MsgBox(.selectSingleNode("//Fields[2]/FDName[1]").text)
+					'MsgBox(.selectSingleNode("//Fields[2]/FDType[1]").text)
 				End With
 
 			End If

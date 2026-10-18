@@ -172,19 +172,19 @@ Partial Class Form1
         ' CriarToolStripMenuItem
         ' 
         CriarToolStripMenuItem.Name = "CriarToolStripMenuItem"
-        CriarToolStripMenuItem.Size = New Size(151, 26)
+        CriarToolStripMenuItem.Size = New Size(224, 26)
         CriarToolStripMenuItem.Text = "Criar"
         ' 
         ' AbrirToolStripMenuItem1
         ' 
         AbrirToolStripMenuItem1.Name = "AbrirToolStripMenuItem1"
-        AbrirToolStripMenuItem1.Size = New Size(151, 26)
+        AbrirToolStripMenuItem1.Size = New Size(224, 26)
         AbrirToolStripMenuItem1.Text = "Abrir"
         ' 
         ' AtualizarToolStripMenuItem
         ' 
         AtualizarToolStripMenuItem.Name = "AtualizarToolStripMenuItem"
-        AtualizarToolStripMenuItem.Size = New Size(151, 26)
+        AtualizarToolStripMenuItem.Size = New Size(224, 26)
         AtualizarToolStripMenuItem.Text = "Atualizar"
         ' 
         ' ConexãoToolStripMenuItem
@@ -323,7 +323,7 @@ Partial Class Form1
         ' ExibirToolStripMenuItem
         ' 
         ExibirToolStripMenuItem.Name = "ExibirToolStripMenuItem"
-        ExibirToolStripMenuItem.Size = New Size(129, 26)
+        ExibirToolStripMenuItem.Size = New Size(224, 26)
         ExibirToolStripMenuItem.Text = "Exibir"
         ' 
         ' FontesToolStripMenuItem

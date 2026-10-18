@@ -68,9 +68,19 @@ Module IO
     Sub Insere()
         'On Error Resume Next
         conn.Execute("INSERT INTO Membros(ID,Nome,Nascimento,LocalNascimento,Falecimento,LocalFalecimento,Batismo,LocalBatismo,Sepultamento,LocalSepultamento,famc,fams) VALUES ('" &
-pessoa & "','" & nome & "','" & nasc & "','" & bloc & "','" & mort & "','" & dloc & "','" & batismo & "','" & bloc & "','" & sepulta & "','" & sloc & "','" & famc & "','" & fams & "')")
+pessoa & "','" & nome & "','" & nasc & "','" & bloc & "','" & mort & "','" & dloc & "','" & batismo & "','" & cloc & "','" & sepulta & "','" & sloc & "','" & famc & "','" & fams & "')")
     End Sub
 
+    Sub Insere2()
+        'On Error Resume Next
+        conn.Execute("INSERT INTO Crianças(FID,Criança) VALUES ('" & fam & "','" & chil & "')")
+    End Sub
+
+
+    Sub Insere3()
+        'On Error Resume Next
+        conn.Execute("INSERT INTO Familias(FID,Marido,Esposa,Casamento,Local) VALUES ('" & fam & "','" & husb & "','" & wife & "','" & mdate & "','" & mloc & "')")
+    End Sub
 
     Sub token2(tk_number As Integer, tk As String)
 
@@ -119,7 +129,7 @@ pessoa & "','" & nome & "','" & nasc & "','" & bloc & "','" & mort & "','" & dlo
                             Form1.RichTextBox1.Text = Form1.RichTextBox1.Text & "Name: " & line_value & vbCrLf
                         Else
                             nome = Replace(line_value, "/", "")
-                            nome = Replace(nome, Chr(39), "")
+                            nome = Replace(nome, Chr(39), "''")
                             Dim match As Match
                             match = Regex.Match(xref_id, "\d+")
                             pessoa = match.Value
@@ -154,30 +164,26 @@ pessoa & "','" & nome & "','" & nasc & "','" & bloc & "','" & mort & "','" & dlo
                     Case "PLAC"
                         Select Case (evento)
                             Case "BIRT"
-                                bloc = Replace(line_value, Chr(39), "")
+                                bloc = Replace(line_value, Chr(39), "''")
                             Case "DEAT"
-                                dloc = Replace(line_value, Chr(39), "")
+                                dloc = Replace(line_value, Chr(39), "''")
                             Case "CHR"
-                                cloc = Replace(line_value, Chr(39), "")
+                                cloc = Replace(line_value, Chr(39), "''")
                             Case "BURI"
-                                sloc = Replace(line_value, Chr(39), "")
+                                sloc = Replace(line_value, Chr(39), "''")
                             Case "MARR"
-                                mloc = line_value
+                                mloc = Replace(line_value, Chr(39), "''")
                         End Select
 
                     Case "CHAN"
                         line_value = ""
                         tag = ""
                         evento = ""
-                        'pessoa = pessoa + 1
-                        'Form1.ToolStripStatusLabel1.Text = nome
 
 
                     Case "FAMC"
-                        'MsgBox("FAMC :" & line_value)     'line_value=ID da familia da pessoa qdo crianca
                         famc = line_value
                     Case "FAMS"
-                        'MsgBox("FAMS :" & line_value)      'line_value=ID da familia em que é cônjuge
                         fams = line_value
                 End Select
 
@@ -281,7 +287,7 @@ pessoa & "','" & nome & "','" & nasc & "','" & bloc & "','" & mort & "','" & dlo
                             familia = familia + 1
                             'MsgBox("FAM: " & xref_id)
                             If familia > 1 Then
-                                'Insere3
+                                Insere3()
                                 'MsgBox(fam & " = " & husb & " : " & wife & " : " & mloc & " : " & mdate)
                                 husb = ""
                                 wife = ""
@@ -302,7 +308,9 @@ pessoa & "','" & nome & "','" & nasc & "','" & bloc & "','" & mort & "','" & dlo
                                 'MsgBox("WIFE: " & tk & "FAM: " & xref_id)
                                 wife = tk
                             Case "CHIL"
-                                'Insere2
+                                chil = tk
+                                fam = xref_id
+                                Insere2()
                                 'MsgBox("CHIL: " & tk & "FAM: " & xref_id)
                         End Select
 
@@ -338,7 +346,6 @@ pessoa & "','" & nome & "','" & nasc & "','" & bloc & "','" & mort & "','" & dlo
     End Sub
 
     Sub PopulateDB()
-        'startFS2(My.Settings.defaultInputFile)
         Dim l, c, p As String
         Dim i As Integer
         p = ""

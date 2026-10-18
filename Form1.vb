@@ -12,12 +12,14 @@ Imports System.Xml
 Imports System.Xml.Serialization
 Imports Microsoft.VisualBasic.ApplicationServices
 
+
 Public Class Form1
     Dim connectionString As String
     Dim conn, rs, r
     Dim connected = False
     Dim strQuery As String
     Public loadingxml = False, populatingDGV As Boolean
+
 
 
 
@@ -62,26 +64,26 @@ Public Class Form1
                     End If
 
                 Case "Pesquisa Parcial no Campo Atual"
-                    parametro = InputBox("Digite o valor: ", sender.ToString & ": " & Campos(DataGridView1.CurrentCell.ColumnIndex))
+                    parametro = InputBox("Digite o valor: ", sender.ToString & ": " & IO.Campos(DataGridView1.CurrentCell.ColumnIndex))
                     If (parametro <> "") Then
-                        If Campos(DataGridView1.CurrentCell.ColumnIndex) = "ID" And IsNumeric(parametro) Then
-                            qry = "SELECT ID,Nome,Nascimento,LocalNascimento,Falecimento,LocalFalecimento,Batismo,LocalBatismo,Sepultamento,LocalSepultamento,famc,fams FROM Membros GROUP BY ID,Nome,Nascimento,LocalNascimento,Falecimento,LocalFalecimento,Batismo,LocalBatismo,Sepultamento,LocalSepultamento,famc,fams HAVING " & Campos(DataGridView1.CurrentCell.ColumnIndex) & " = " & parametro & ";"
-                        ElseIf Campos(DataGridView1.CurrentCell.ColumnIndex) = "ID" And Not IsNumeric(parametro) Then
+                        If IO.Campos(DataGridView1.CurrentCell.ColumnIndex) = "ID" And IsNumeric(parametro) Then
+                            qry = "SELECT ID,Nome,Nascimento,LocalNascimento,Falecimento,LocalFalecimento,Batismo,LocalBatismo,Sepultamento,LocalSepultamento,famc,fams FROM Membros GROUP BY ID,Nome,Nascimento,LocalNascimento,Falecimento,LocalFalecimento,Batismo,LocalBatismo,Sepultamento,LocalSepultamento,famc,fams HAVING " & IO.Campos(DataGridView1.CurrentCell.ColumnIndex) & " = " & parametro & ";"
+                        ElseIf Io.Campos(DataGridView1.CurrentCell.ColumnIndex) = "ID" And Not IsNumeric(parametro) Then
                             Exit Sub
                         Else
-                            qry = "SELECT ID,Nome,Nascimento,LocalNascimento,Falecimento,LocalFalecimento,Batismo,LocalBatismo,Sepultamento,LocalSepultamento,famc,fams FROM Membros GROUP BY ID,Nome,Nascimento,LocalNascimento,Falecimento,LocalFalecimento,Batismo,LocalBatismo,Sepultamento,LocalSepultamento,famc,fams HAVING " & Campos(DataGridView1.CurrentCell.ColumnIndex) & " LIKE ('%" & parametro & "%');"
+                            qry = "SELECT ID,Nome,Nascimento,LocalNascimento,Falecimento,LocalFalecimento,Batismo,LocalBatismo,Sepultamento,LocalSepultamento,famc,fams FROM Membros GROUP BY ID,Nome,Nascimento,LocalNascimento,Falecimento,LocalFalecimento,Batismo,LocalBatismo,Sepultamento,LocalSepultamento,famc,fams HAVING " & IO.Campos(DataGridView1.CurrentCell.ColumnIndex) & " LIKE ('%" & parametro & "%');"
                         End If
                     End If
 
                 Case "Pesquisa Exata no Campo Atual"
-                    parametro = InputBox("Digite o valor: ", sender.ToString & ": " & Campos(DataGridView1.CurrentCell.ColumnIndex))
+                    parametro = InputBox("Digite o valor: ", sender.ToString & ": " & IO.Campos(DataGridView1.CurrentCell.ColumnIndex))
                     If (parametro <> "") Then
-                        If Campos(DataGridView1.CurrentCell.ColumnIndex) = "ID" And IsNumeric(parametro) Then
-                            qry = "SELECT * FROM Membros WHERE " & Campos(DataGridView1.CurrentCell.ColumnIndex) & " = " & parametro & ";"
-                        ElseIf Campos(DataGridView1.CurrentCell.ColumnIndex) = "ID" And Not IsNumeric(parametro) Then
+                        If IO.Campos(DataGridView1.CurrentCell.ColumnIndex) = "ID" And IsNumeric(parametro) Then
+                            qry = "SELECT * FROM Membros WHERE " & IO.Campos(DataGridView1.CurrentCell.ColumnIndex) & " = " & parametro & ";"
+                        ElseIf Io.Campos(DataGridView1.CurrentCell.ColumnIndex) = "ID" And Not IsNumeric(parametro) Then
                             Exit Sub
                         Else
-                            qry = "SELECT * FROM Membros WHERE " & Campos(DataGridView1.CurrentCell.ColumnIndex) & " = '" & parametro & "';"
+                            qry = "SELECT * FROM Membros WHERE " & IO.Campos(DataGridView1.CurrentCell.ColumnIndex) & " = '" & parametro & "';"
                         End If
 
                     End If
@@ -146,26 +148,26 @@ Public Class Form1
         If Not rbutf8.Checked Then
             rbascii.Checked = True
         End If
-        'Campos(0) = "ID"
-        'Campos(1) = "Nome"
-        'Campos(2) = "Nascimento"
-        'Campos(3) = "LocalNascimento"
-        'Campos(4) = "Falecimento"
-        'Campos(5) = "LocalFalecimento"
-        'Campos(6) = "Batismo"
-        'Campos(7) = "LocalBatismo"
-        'Campos(8) = "Sepultamento"
-        'Campos(9) = "LocalSepultamento"
-        'Campos(10) = "famc"
-        'Campos(11) = "fams"
+
+        IO.Campos(0) = "ID"
+        IO.Campos(1) = "Nome"
+        IO.Campos(2) = "Nascimento"
+        IO.Campos(3) = "LocalNascimento"
+        IO.Campos(4) = "Falecimento"
+        IO.Campos(5) = "LocalFalecimento"
+        IO.Campos(6) = "Batismo"
+        IO.Campos(7) = "LocalBatismo"
+        IO.Campos(8) = "Sepultamento"
+        IO.Campos(9) = "LocalSepultamento"
+        IO.Campos(10) = "famc"
+        IO.Campos(11) = "fams"
         ShowStatus()
 
 
     End Sub
 
     Private Sub AbrirToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles AbrirToolStripMenuItem.Click
-        'MsgBox(My.Settings.defaultInputFile)
-        Dim ofd As New OpenFileDialog()
+        Dim ofd As New OpenFileDialog
 
         ' Configurações opcionais
         ofd.InitialDirectory = My.Settings.gedcomFolder
@@ -324,8 +326,6 @@ Public Class Form1
 
     End Sub
 
-    Private Sub ExibirToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ExibirToolStripMenuItem.Click
-    End Sub
 
     Private Sub AbrirToolStripMenuItem1_Click(sender As Object, e As EventArgs) Handles AbrirToolStripMenuItem1.Click
         OpenFileDialog1.FileName = "*.accdb"
@@ -791,6 +791,10 @@ Public Class Form1
             End If
 
         End If
+    End Sub
+
+    Private Sub ExibirToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ExibirToolStripMenuItem.Click
+
     End Sub
 
 
